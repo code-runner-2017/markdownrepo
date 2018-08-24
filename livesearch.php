@@ -26,7 +26,7 @@ print "$mdOutput";
 function getSearchResults($search) {
 
 
-	$mdResults .= searchMain($search, 0);
+	$mdResults = searchMain($search, 0);
 	return $mdResults;
 }
 

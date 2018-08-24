@@ -77,8 +77,13 @@ function searchFilesForPermaLink($allMDFiles, $hash) {
 //// called on by file iterators to examine individual file contents
 
 function doesFileContainString($file, $string) { //returns an array of results within a file or filename
+    $size = filesize($file);
 	$fileHandle = fopen($file, "r") or die("Unable to open file (string search): $file!");
-	$md = fread($fileHandle,filesize($file));
+    
+    if ($size ==  0) {
+        die("FILE IS $file");
+    }
+	$md = fread($fileHandle, $size);
 	fclose($fileHandle);
 
 	$thisResultArray = array(); //create return object
@@ -229,7 +234,7 @@ function createMarkdownFileLink($directory, $filename) { //returns a markdown li
 function getFileURL($directory, $filename) {
 	$dirLink = sanitizeURL($directory);
 	$fileLink = sanitizeURL($filename);
-	$url = "/?directory=$dirLink&file=$fileLink";
+	$url = APP_BASE_URL . "/?directory=$dirLink&file=$fileLink";
 	return $url;
 }
 
@@ -238,8 +243,10 @@ function removeBaseFromPath($path) {
 	$basePath = preg_replace("/\//", "\\/", $basePath); //escape any forward slashes
 	$basePath2 = getMarkdownDirectory(); //if MD_BASE_PATH is a relative directory, we needed to previously convert it to an absolute path. This will result in a different string that still needs removal
 	$basePath2 = preg_replace("/\//", "\\/", $basePath2); //escape any forward slashes
-	$noBasePath = preg_replace("/$basePath/", "", $path); // remove base path from link
-	$noBasePath = preg_replace("/$basePath2/", "", $path); // remove base path from link
+	$noBasePath = preg_replace("/$basePath/", "", $path); // remove base path from link    
+	// $noBasePath = preg_replace("/$basePath2/", "", $path); // remove base path from link
+	$noBasePath = substr($path, strlen($basePath2));
+
 	return $noBasePath;
 }
 

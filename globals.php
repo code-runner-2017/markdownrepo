@@ -1,9 +1,9 @@
 <?php
 if (file_exists("config.php")) {
 	require 'config.php';
+} else {
+    require 'config-dist.php';
 }
-require 'config-dist.php';
-
 
 
 function setApparentDirectory($currentDirectory) {
@@ -24,6 +24,7 @@ function checkGET(){
 	}
 	if (!empty($_GET['directory'])) {
 		$currentDirectory = "./" . $_GET['directory'];
+        // $currentDirectory = $_GET['directory'];
 	} else {
 		$currentDirectory = "./";
 	}

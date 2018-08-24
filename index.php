@@ -2,8 +2,8 @@
 require 'parsedown/Parsedown.php';
 require 'globals.php';
 
-// error_reporting(E_ALL); //enable these two lines for debugging info printed to browser
-// ini_set('display_errors', 1);
+error_reporting(E_ALL); //enable these two lines for debugging info printed to browser
+ini_set('display_errors', 1);
 
 chdir(MD_BASE_PATH);
 global $currentDirectory, $file, $apparentDirectory;
@@ -13,6 +13,8 @@ $apparentDirectory = setApparentDirectory($currentDirectory); // current directo
 
 $pageTitle = printHeader($file, $apparentDirectory);
 printSearchHTML();
+
+$permalink = null;
 
 // generate page contents
 $Parsedown = new Parsedown(); //create Parsdown object
@@ -25,7 +27,7 @@ if (!empty($file)) { // check if there is a file specified - if so, display cont
 
 	if (ENABLE_PERMALINKS) {
 		$permalink = checkForPermaLink($md, $file);
-	}
+	} 
 
 	if (SHOW_FILENAME) {
 		$md = addFileName($md, $file);
@@ -33,12 +35,13 @@ if (!empty($file)) { // check if there is a file specified - if so, display cont
 	$md = processImageLinks($md, $apparentDirectory);
 } else {
 	$allFilesInCD = glob("*");
-	$mdFilesInCD = glob("*.md");
+    $mdFilesInCD = glob("*.md");
 
 	$folderSection = getFolderList($allFilesInCD, $apparentDirectory);
-	$fileSection = getFileList($mdFilesInCD, $apparentDirectory);
+	$fileSection = getFileList($allFilesInCD, $apparentDirectory);
 	$md = "# " . DATA_STORE_NAME . "\n" . $folderSection . $fileSection;
 }
+
 $md = addWrappers($file, $md, $apparentDirectory, $permalink);
 $mdOutput = $Parsedown->text($md);
 print "$mdOutput";
@@ -107,14 +110,17 @@ function addWrappers($filename, $md, $cd, $permalink) {
 	if ($filename != "" && SHOW_TIMESTAMP) {
 		$dateString = getFileModDate($filename);
 		$dateString = "<p class='mdrTimestamp'>$dateString</p>\n";
-	}
+	} else {
+        $dateString = '';
+    }
 
 	if ($filename != "" && ENABLE_POPUPLINKS) {
 		$selfLink = "index.php?file=$filename&directory=$directory";
 		$popupLinkString = "<p class='mdrPermalink'><a href='$selfLink' onclick=\"window.open('$selfLink', '$filename', 'width=1024,height=768,status=yes,toolbar=yes,scrollbars=yes'); return false;\">popout article</a></p>";
 		// <a href="print.html"  onclick="window.open('print.html', 'newwindow', 'width=300,height=250'); return false;"> Print</a>
-
-	}
+	} else {
+        $popupLinkString = '';
+    }
 
 
 	$breadcrumbs = $breadcrumbs . "\n$md\n***\n" . $dateString . $popupLinkString . $permalink . $breadcrumbs; //surround the imported md document with the breadcrumbs
@@ -125,6 +131,7 @@ function addWrappers($filename, $md, $cd, $permalink) {
 
 
 function getFileList($filesInCD, $currentDirectory) {
+    $string = "";
 
 	foreach($filesInCD as $thisFile) {
 		$dirLink = sanitizeURL($currentDirectory);
