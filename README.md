@@ -24,7 +24,7 @@ This is a read only method of viewing a repository full of md documents, powered
 	1. `git clone https://github.com/mredig/markdownrepo`
 	1. `git submodule init`
 	1. `git submodule update`
-1. copy `config-sample.php` to `config.php` and customize the settings within
+1. copy `config-dist.php` to `config.php` and customize the settings within
 1. (optional) if using a custom css file, perhaps edit it to support the following selectors (you can base it from the included css files)
 	* `#markdownRepoLiveSearch`
 	* `.mdrTimestamp`
