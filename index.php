@@ -134,6 +134,10 @@ function getFileList($filesInCD, $currentDirectory) {
     $string = "";
 
 	foreach($filesInCD as $thisFile) {
+	    if (is_dir($thisFile)) {
+	        continue;
+	    }
+	    
 		$dirLink = sanitizeURL($currentDirectory);
 		$fileLink = sanitizeURL($thisFile);
 
