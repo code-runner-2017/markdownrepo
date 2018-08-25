@@ -123,7 +123,7 @@ function addWrappers($filename, $md, $cd, $permalink) {
     }
 
 
-	$breadcrumbs = $breadcrumbs . "\n$md\n***\n" . $dateString . $popupLinkString . $permalink . $breadcrumbs; //surround the imported md document with the breadcrumbs
+	$breadcrumbs = $breadcrumbs . "\n$md\n***\n" . $dateString .  $permalink . $breadcrumbs . $popupLinkString; //surround the imported md document with the breadcrumbs
 
 	return $breadcrumbs;
 }
