@@ -1,8 +1,8 @@
 <?php
 //// copy this file to 'config.php' to customize. This one is used for defaults and new features.
 
-// application base URL
-define('APP_BASE_URL', '/');
+// application base URL, eg. '/markdownrepo' (without trailing slash). Leave empty string if the app is mounted as root.
+define('APP_BASE_URL', '');
 //absolute path to directory housing your md files (md should be lowercase in file names)
 define('MD_BASE_PATH', '.');
 //URL path to where the css file are located for the md repo (optional)

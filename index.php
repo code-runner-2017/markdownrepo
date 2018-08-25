@@ -163,7 +163,7 @@ function getFolderList($allFilesInCD, $currentDirectory) {
 		}
 		if (is_dir($thisFile)) {
 			$dirLink = sanitizeURL("$currentDirectory/$thisFile");
-			$string .= "#### [$thisFile](?directory=$dirLink)\n";
+			$string .= "#### [$thisFile/](?directory=$dirLink)\n";
 		}
 	}
 
